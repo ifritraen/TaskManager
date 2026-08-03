@@ -82,23 +82,24 @@ class TaskNotificationService : Service() {
 
     private fun getCpuUsage(): Int {
         return try {
-            val output = Shell.exec("top -n 1 -b | head -n 5")
-            val line = output.lines().find { it.contains("cpu", ignoreCase = true) || it.contains("idle", ignoreCase = true) }
-            if (line != null) {
-                val idleMatch = Regex("""(\d+)%\s*idle""").find(line)
-                if (idleMatch != null) {
-                    val idle = idleMatch.groupValues[1].toIntOrNull() ?: 100
-                    (100 - idle).coerceIn(0, 100)
+            val stat = java.io.File("/proc/stat").readText()
+            val firstLine = stat.lines().firstOrNull { it.startsWith("cpu ") } ?: return 15
+            val parts = firstLine.split("\\s+".toRegex()).drop(1).mapNotNull { it.toLongOrNull() }
+            if (parts.size >= 4) {
+                val idle = parts[3]
+                val total = parts.sum()
+                if (total > 0) {
+                    ((total - idle) * 100 / total).toInt().coerceIn(0, 100)
                 } else 15
             } else 15
         } catch (e: Exception) {
-            0
+            15
         }
     }
 
     private fun getRamUsage(): Int {
         return try {
-            val memInfo = Shell.exec("cat /proc/meminfo")
+            val memInfo = java.io.File("/proc/meminfo").readText()
             var total = 0L
             var free = 0L
             var buffers = 0L

@@ -374,8 +374,12 @@ fun ProcessInfo(
                         sideEffect = { shouldFreeze ->
                             isFrozen = shouldFreeze
                             kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
-                                val signal = if (shouldFreeze) "STOP" else "CONT"
-                                com.rk.taskmanager.daemon.Shell.exec("kill -$signal ${proc.proc.pid}")
+                                val cmd = org.json.JSONObject().apply {
+                                    put("cmd", "KILL")
+                                    put("pid", proc.proc.pid)
+                                    put("signal", if (shouldFreeze) 19 else 18) // 19 = SIGSTOP, 18 = SIGCONT
+                                }
+                                send_daemon_messages.emit(cmd.toString())
                             }
                         }
                     )
