@@ -14,5 +14,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
 *.log
 
+.aaa/
+.agents/
+.env
+secrets.*
+sensitive.*

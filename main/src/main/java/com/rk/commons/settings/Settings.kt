@@ -14,7 +14,7 @@ object Settings {
     var kills by IntPref(default = 0)
     var pullToRefresh_procs by BooleanPref(default = true)
     var confirmkill by BooleanPref(default = true)
-    var defaultToProcessScreen by BooleanPref(default = false)
+    var defaultToProcessScreen by BooleanPref(default = true)
     var selectedNetInterface by StringPref(key = "selected_net_interface", default = "")
 
     var pinnedProcesses: Set<String>

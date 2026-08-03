@@ -363,6 +363,22 @@ fun ProcessInfo(
                             viewModel.togglePin(proc)
                         }
                     )
+
+                    var isFrozen by remember { mutableStateOf(false) }
+                    SettingsToggle(
+                        label = if (isFrozen) "Resume Process" else "Freeze Process",
+                        description = if (isFrozen) "Resume execution of this process (SIGCONT)" else "Pause execution of this process (SIGSTOP)",
+                        default = isFrozen,
+                        isEnabled = bridge?.isPro()?.value == true && enabled,
+                        showSwitch = true,
+                        sideEffect = { shouldFreeze ->
+                            isFrozen = shouldFreeze
+                            kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+                                val signal = if (shouldFreeze) "STOP" else "CONT"
+                                com.rk.taskmanager.daemon.Shell.exec("kill -$signal ${proc.proc.pid}")
+                            }
+                        }
+                    )
                 }
 
                 PreferenceGroup {
