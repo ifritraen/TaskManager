@@ -59,4 +59,16 @@ jobs:
           -F chat_id="-1002292589492" \
           -F message_thread_id="116" \
           -F caption="${{ github.event.head_commit.message }} by ${{ github.actor }}" \
-          -F document=@"app/taskmanager-${{ env.COMMIT_HASH }}.apk"
+          -F document=@"app/taskmanager-${{ env.COMMIT_HASH }}.apk" || true
+
+      - name: Create GitHub Release
+        if: ${{ success() }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.5.2-${{ env.COMMIT_HASH }}
+          name: TaskManager v1.5.2 (${{ env.COMMIT_HASH }})
+          files: app/taskmanager-${{ env.COMMIT_HASH }}.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
