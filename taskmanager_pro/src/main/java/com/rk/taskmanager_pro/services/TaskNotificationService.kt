@@ -10,8 +10,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.rk.commons.settings.Settings
-import com.rk.taskmanager.daemon.Daemon
-import com.rk.taskmanager.daemon.Shell
 import kotlinx.coroutines.*
 
 class TaskNotificationService : Service() {
