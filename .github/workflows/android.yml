@@ -8,6 +8,10 @@ on:
       - '**/*.md'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build-release:
     name: Build Release
