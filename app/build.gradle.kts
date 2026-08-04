@@ -75,7 +75,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.rk.taskmanager"
+        applicationId = "com.raen.taskmanager"
         minSdk = 26
         targetSdk = 37
 
