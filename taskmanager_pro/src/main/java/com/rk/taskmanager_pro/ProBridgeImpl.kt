@@ -59,11 +59,11 @@ class ProBridgeImpl : ProBridge {
 
     @Composable
     override fun NetScreen() {
-        NetScreen()
+        com.rk.taskmanager_pro.screens.NetScreen()
     }
 
     @Composable
     override fun BatteryScreen() {
-        BatteryScreen()
+        com.rk.taskmanager_pro.screens.BatteryScreen()
     }
 }
