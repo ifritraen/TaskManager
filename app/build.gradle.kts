@@ -62,7 +62,12 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            val relConfig = signingConfigs.findByName("release")
+            if (relConfig != null && relConfig.storeFile?.exists() == true && !relConfig.storePassword.isNullOrEmpty()) {
+                signingConfig = relConfig
+            } else {
+                signingConfig = signingConfigs.getByName("debug")
+            }
         }
         debug{
             versionNameSuffix = "-DEBUG"
